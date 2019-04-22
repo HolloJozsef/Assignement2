@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Software Design Demo</title>
+    <link rel="stylesheet" media="screen" th:href="@{/css/bootstrap.min.css}" type="text/css"/>
+    <link rel="stylesheet" media="screen" th:href="@{/css/core.css}" type="text/css"/>
+    <base href="/">
+</head>
+<body>
+<div th:replace="common/header::navbar"></div>
+<div class="container">
+    <h1>Menus for  <span th:text="${restaurant.name}"/></h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Menu</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="menu : ${menus}">
+            <td><span th:text="${menu.getName()}"> Name </span></td>
+            <td><span th:text="${menu.getPrice()}"> Price </span></td>
+            <td><a th:href="@{'/order/' + ${menu.getId()}}">Order</a></td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+<footer th:replace="~{common/footer::footer}"></footer>
+</body>
+</html>

@@ -1,8 +1,12 @@
 package ro.utcn.springbootdemo.repository;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import ro.utcn.springbootdemo.entities.Menu;
 import ro.utcn.springbootdemo.entities.Order;
 
-public interface OrderRepository extends CrudRepository<Order,Long> {
+import java.util.Optional;
 
+public interface OrderRepository extends CrudRepository<Order,Long> {
+        Optional<Order> findById(@Param("id") Long id);
 }

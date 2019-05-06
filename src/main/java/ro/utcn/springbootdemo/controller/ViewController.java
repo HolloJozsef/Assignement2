@@ -88,7 +88,7 @@ public String login(Model model) {
     public String orderDetails(@PathVariable("menuId") long menuId, Model model)
     {
         Menu menu=menuService.getById(menuId);
-        menuService.addOrCreateOrder(menu);
+        menuService.addOrCreateOrder(menu,menuId);
         model.addAttribute("menu", menu);
         model.addAttribute("order",menu.getOrders());
         //model.addAttribute("menus", restaurant.getMenu());

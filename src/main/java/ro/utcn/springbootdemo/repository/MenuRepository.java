@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface MenuRepository extends CrudRepository<Menu, Long> {
     Optional<Menu> findOneWithRestaurantById(@Param("id") Long id);
+    Optional<Menu> findById(@Param("id") Long id);
 
 }

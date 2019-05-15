@@ -1,5 +1,7 @@
 package ro.utcn.springbootdemo.entities;
 
+import org.springframework.cache.annotation.Cacheable;
+
 import javax.persistence.*;
 import java.util.List;
 

@@ -3,6 +3,7 @@ package ro.utcn.springbootdemo.service;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,10 +31,11 @@ public class UserService  {
         return userRepository.findUserByEmail(email).orElseThrow(()->new IllegalArgumentException("User not found. Id:"+ email));
     }
     @Transactional(readOnly=true)
-    public User loadUserByEmail(final String username)
+    public User loadUserByEmail(String username)
             throws UsernameNotFoundException {
 
         User user = userRepository.findUserByEmail(username).get();
+        AuthorityUtils.createAuthorityList(user.getType());
         return user;
 
     }
@@ -44,6 +46,6 @@ public class UserService  {
         if (user == null) {
             throw new UsernameNotFoundException(name);
         }
-        return new User();
+        return user;
     }
 }

@@ -2,6 +2,7 @@ package ro.utcn.springbootdemo.service;
 
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 import ro.utcn.springbootdemo.entities.Menu;
 import ro.utcn.springbootdemo.entities.Restaurant;

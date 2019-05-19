@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Software Design Demo</title>
-<link href="../static/css/bootstrap.min.css" rel="stylesheet"
-	media="screen" th:href="@{css/bootstrap.min.css}" />
-<link href="../static/css/core.css" rel="stylesheet" media="screen"
-	th:href="@{css/core.css}" />
+	<title>Software Design Demo</title>
+	<link href="../static/css/bootstrap.min.css" rel="stylesheet"
+		  media="screen" th:href="@{css/bootstrap.min.css}" />
+	<link href="../static/css/core.css" rel="stylesheet" media="screen"
+		  th:href="@{css/core.css}" />
 </head>
 <body>
 <div th:replace="common/header::navbar"></div>
-	<h2>Login Page</h2>
+<h2>Login Page</h2>
 
-	<p>After you log in, you can proceed to from the
-		application.</p>
-	<form th:action="@{/login}" method="post">
-		<label for="username">Username</label>: <input type="text"
-			id="username" name="username" autofocus="autofocus" /> <label
-			for="password">Password</label>: <input type="password" id="password"
-			name="password" /><input type="submit" value="Log in" />
+<p>After you log in, you can proceed to from the
+	application.</p>
+<form th:action="@{/login}" method="post">
+	<label for="username">Username</label>: <input type="text"
+												   id="username" name="username" autofocus="autofocus" /> <label
+		for="password">Password</label>: <input type="password" id="password"
+												name="password" /><input type="submit" value="Log in" />
 
-	</form>
+</form>
 
-	<footer th:insert="~{common/footer :: footer}"></footer>
+<footer th:insert="~{common/footer :: footer}"></footer>
 </body>
 </html>

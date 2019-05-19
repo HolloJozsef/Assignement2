@@ -11,6 +11,7 @@
  ************************************************************************/
 package ro.utcn.springbootdemo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,11 +19,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ro.utcn.springbootdemo.entities.Menu;
+import ro.utcn.springbootdemo.entities.Order;
 import ro.utcn.springbootdemo.entities.Restaurant;
-import ro.utcn.springbootdemo.entities.User;
-import ro.utcn.springbootdemo.service.MenuService;
-import ro.utcn.springbootdemo.service.RestaurantService;
-import ro.utcn.springbootdemo.service.UserService;
+import ro.utcn.springbootdemo.repository.MenuRepository;
+import ro.utcn.springbootdemo.repository.OrderRepository;
+import ro.utcn.springbootdemo.service.*;
 
 @Controller
 public class ViewController {
@@ -34,31 +35,16 @@ public class ViewController {
     private MenuService menuService;
     @Autowired
     private UserService userService;
-
+    public Cache cache=new Cache();
+    @Autowired
+    public MenuRepository menuRepository;
+    @Autowired
+    public OrderRepository orderRepository;
     @RequestMapping("/login")
     public String login() {
+
         return "login";
     }
-  /*
-@RequestMapping("/login")
-public String login(Model model) {
-    List<User> users=userService.getAllUsers();
-    model.addAttribute("users",users);
-    return "login";
-}*/
-    /*
-    @RequestMapping("/login/{email}")
-    public String login(@PathVariable("email") String email,Model model) {
-
-        List<User> users=userService.getAllUsers();
-        for(User user : users){
-            if(user.getEmail().equals(email))
-                if(user.getPassword().equals(userService.getByEmail(email).getPassword()))
-                    return "restaurant_details";
-
-        }
-
-    }*/
     @RequestMapping({ "/index", "/" })
     public String index() {
         return "index";
@@ -67,8 +53,19 @@ public String login(Model model) {
     @RequestMapping({ "/home" })
     public String hello(Model model)
     {
-        List<Restaurant> allRestaurants = restaurantService.getAllRestaurants();
-        model.addAttribute("restaurants", allRestaurants);
+
+        List <Restaurant> list=new ArrayList<>();
+        System.out.println((System.currentTimeMillis()-cache.getTime())/1000+" ");
+        if(System.currentTimeMillis()-cache.getTime()<30000 && cache.getCacheList()!=null){
+            list=cache.getCacheList();
+            System.out.println("Cache");
+        }else{
+            list = restaurantService.getAllRestaurants();
+            cache.setCacheList(list);
+            cache.setTime(System.currentTimeMillis());
+            System.out.println("Database");
+        }
+        model.addAttribute("restaurants", list);
         return "home";
     }
 
@@ -79,30 +76,19 @@ public String login(Model model) {
         Restaurant restaurant=restaurantService.getById(restaurantId);
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("menus", restaurant.getMenu());
-       // System.out.println(restaurant.getMenu().toString());
-       // model.addAttribute("newMapping", new RestaurantMenuDTO(restaurant, "",0));
         return "restaurant_details";
     }
 
     @RequestMapping(path = "/order/{menuId}", produces = "text/html")
     public String orderDetails(@PathVariable("menuId") long menuId, Model model)
     {
+        CsvFileWriter csvFileWriter=new CsvFileWriter();
+        csvFileWriter.writeCsvFile("order.csv",(List<Order>)orderRepository.findAll());
         Menu menu=menuService.getById(menuId);
         menuService.addOrCreateOrder(menu,menuId);
         model.addAttribute("menu", menu);
         model.addAttribute("order",menu.getOrders());
-        //model.addAttribute("menus", restaurant.getMenu());
-        // System.out.println(restaurant.getMenu().toString());
-        // model.addAttribute("newMapping", new RestaurantMenuDTO(restaurant, "",0));
         return "order_details";
     }
-    /*
-    @RequestMapping(value = "/createPost", method = RequestMethod.POST)
-    public String createPost()
-    {
-        postsService.addOrCreateTag(newMapping.getPost(), newMapping.getTagName());
-        Long postId = newMapping.getPost().getId();
-        return "redirect:/details/" + postId;
-    }
-*/
+
 }

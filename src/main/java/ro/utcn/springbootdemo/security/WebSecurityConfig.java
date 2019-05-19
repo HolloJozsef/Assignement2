@@ -35,6 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 	private DataSource dataSource;
 	@Autowired
 	private ViewController viewController;
+	@Autowired
+	private UserRepository userRepository;
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
@@ -53,6 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+
 		auth.inMemoryAuthentication().withUser("user").password(passwordEncoder().encode("user")).roles("USER").and()
 				.withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN");
 	}
